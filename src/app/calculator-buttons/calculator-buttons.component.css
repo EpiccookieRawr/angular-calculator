@@ -1,0 +1,42 @@
+.calculator-buttons {
+    display: flex;
+}
+
+.number-buttons {
+    flex-basis: 75%;
+}
+
+.number-buttons ul {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    list-style: none;
+}
+
+.number-buttons ul li {
+    flex-basis: 33%;
+    padding: 50px;
+    text-align: center;
+    background: red;
+}
+
+.number-buttons ul li:last-child {
+    flex-basis: 50%;
+}
+
+.operator-buttons {
+    flex-basis: 25%; 
+}
+
+.operator-buttons ul {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+}
+
+.operator-buttons ul li {
+    flex-basis: 100%;
+    text-align: center;
+    padding: 50px;
+    background: #666;
+}

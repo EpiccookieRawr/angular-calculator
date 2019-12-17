@@ -1,0 +1,14 @@
+<div class="row">
+    <div class="calculator-buttons">
+        <div class="number-buttons">
+            <ul>
+                <li class="btn" *ngFor="let left of leftPanel" (click)="clickButton(leftPanelValue)" #leftPanelValue>{{left}}</li>
+            </ul>
+        </div>
+        <div class="operator-buttons">
+            <ul>
+                <li class="btn" *ngFor="let right of rightPanel;" (click)="clickButton(rightPanelValue)" #rightPanelValue>{{right}}</li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -3,58 +3,95 @@ import { Injectable } from '@angular/core';
 
 export class CalculatorService {
     test = 'value';
-    expression = '6+9*866123/5';
-    answer = 0;
+    expression = [];
+    currentValue = [];
+    valueType = {
+        '0' : 'integer',
+        '1' : 'integer',
+        '2' : 'integer',
+        '3' : 'integer',
+        '4' : 'integer',
+        '5' : 'integer',
+        '6' : 'integer',
+        '7' : 'integer',
+        '8' : 'integer',
+        '9' : 'integer',
+        '.' : 'decimal',
+        '+' : 'operator',
+        '-' : 'operator',
+        '*' : 'operator',
+        '/' : 'operator',
+    }
 
-    operators: string[] = [
-        'x', '*', '/', '-'
-    ]
     constructor() {}
 
-    addToExpression(value) {
-        this.expression += value;
+    addToExpression(value: string) {
+        const currnetType = this.valueType[value];
+        console.log(currnetType);
+
+        this.expression.push(value);
         console.log(this.expression);
     }
 
     eval() {
-        if (this.expression !== '') {
-            this.evalFirstOrder(this.expression);
+        let finalExpression = this.expression.slice();
+        if (finalExpression.length > 1) {
+            finalExpression = this.evalFirstOrder(finalExpression);
+            finalExpression = this.evalSecondOrder(finalExpression);
         }
+
+        this.expression = finalExpression;
+        console.log(this.expression);
     }
 
-    evalFirstOrder(currentExpression: string) {
-        console.log(currentExpression);
-        const xPos = currentExpression.indexOf('*');
-        console.log(xPos);
-        if(xPos === -1) {
+    evalFirstOrder(currentExpression: string[]) {
+        if (currentExpression.length === 1) {
             return currentExpression;
         }
-
-        currentExpression = this.evalBlock(xPos, '*', currentExpression);
+        currentExpression = this.evalBlock('*', currentExpression);
+        currentExpression = this.evalBlock('/', currentExpression);
+        return currentExpression;
     }
 
-    evalSecondOrder(expression: string) {
-
+    evalSecondOrder(currentExpression: string[]) {
+        if (currentExpression.length === 1) {
+            return currentExpression;
+        }
+        currentExpression = this.evalBlock('+', currentExpression);
+        currentExpression = this.evalBlock('-', currentExpression);
+        return currentExpression;
     }
 
-    evalBlock(index: number, operator: string, expression: string) {
-        console.log(index, operator, expression);
-        let leftNumber = '';
-        let rightNumber = '';
-        let leftIndex = 1;
-        let rightIndex = 1;
-        const numberRegex = new RegExp('[0-9]');
-        while( numberRegex.test(expression[index - leftIndex])) {
-            leftIndex++;
+    evalBlock(operator: string, expression: string[]) {
+        const operatorIndex: number = expression.indexOf(operator);
+        let leftNum: number;
+        let rightNum: number;
+        let result: number;
+        if (operatorIndex === -1) {
+            return expression;
         }
-        while( numberRegex.test(expression[index + rightIndex])) {
-            rightIndex++;
+
+        leftNum = parseFloat(expression[operatorIndex - 1]);
+        rightNum = parseFloat(expression[operatorIndex + 1]);
+
+        switch(operator) {
+            case '*':
+                result = leftNum * rightNum;
+                break;
+            case '/':
+                result = leftNum / rightNum;
+                break;
+            case '+':
+                result = leftNum + rightNum;
+                break;
+            case '-':
+                result = leftNum - rightNum;
+                break;
         }
-        console.log(index, rightIndex, leftIndex);
-        const firstNum = expression.slice(index - leftIndex, index + leftIndex);
-        const secondNum = expression.slice(index, rightIndex);
-        console.log(firstNum, secondNum);
-        // const evalExpression = expression.slice(leftIndex + 1, rightIndex);
-        return expression;
+
+        expression.splice(operatorIndex - 1, 3, result.toString());
+
+        return this.evalBlock(operator, expression);
+
     }
 }

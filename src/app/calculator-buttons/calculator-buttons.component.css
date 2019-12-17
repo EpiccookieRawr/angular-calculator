@@ -17,11 +17,10 @@
     flex-basis: 33%;
     padding: 50px;
     text-align: center;
-    background: red;
-}
-
-.number-buttons ul li:last-child {
-    flex-basis: 50%;
+    background: #333333;
+    margin: 2px 0px;
+    font-size: 20px;
+    color: #fff;
 }
 
 .operator-buttons {
@@ -38,5 +37,8 @@
     flex-basis: 100%;
     text-align: center;
     padding: 50px;
-    background: #666;
+    font-size: 20px;
+    margin: 2px 0px;
+    background: #333333;
+    color: #fff;
 }

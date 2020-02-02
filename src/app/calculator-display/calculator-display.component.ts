@@ -1,3 +1,4 @@
+import { CalculatorService } from './../calculator.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,10 +7,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./calculator-display.component.css']
 })
 export class CalculatorDisplayComponent implements OnInit {
+  finalExpression = '';
 
-  constructor() { }
+  constructor(private calculatorService: CalculatorService) { }
 
   ngOnInit() {
+    this.calculatorService.evaluatedAction$.subscribe(response => {
+      if(response.length === 1) {
+        this.finalExpression = response[0];
+      } else {
+        this.finalExpression = response.join(' ');
+      }
+    });
   }
 
 }

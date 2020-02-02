@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./calculator-buttons.component.css']
 })
 export class CalculatorButtonsComponent implements OnInit {
-  rightPanel = ['x', '/', '+', '-'];
+  rightPanel = ['*', '/', '+', '-'];
   leftPanel = [
     '1', '2', '3',
     '4', '5', '6',
@@ -17,7 +17,6 @@ export class CalculatorButtonsComponent implements OnInit {
   constructor(private calculatorService: CalculatorService) { }
 
   ngOnInit() {
-    console.log(this.calculatorService.test);
   }
 
   clickButton(clickValue: HTMLElement) {
@@ -27,7 +26,6 @@ export class CalculatorButtonsComponent implements OnInit {
     } else {
       this.calculatorService.eval();
     }
-
   }
 
 }

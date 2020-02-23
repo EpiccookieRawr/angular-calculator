@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./calculator-buttons.component.css']
 })
 export class CalculatorButtonsComponent implements OnInit {
-  rightPanel = ['*', '/', '+', '-'];
+  rightPanel = ['*', '/', '+', '-', '<-'];
   leftPanel = [
     '1', '2', '3',
     '4', '5', '6',
@@ -21,10 +21,15 @@ export class CalculatorButtonsComponent implements OnInit {
 
   clickButton(clickValue: HTMLElement) {
     const calculateValue = clickValue.innerText;
-    if(calculateValue !== '=') {
-      this.calculatorService.addToExpression(clickValue.innerText);
-    } else {
-      this.calculatorService.eval();
+    switch(calculateValue) {
+      case '=':
+        this.calculatorService.eval();
+        break;
+      case '<-':
+        this.calculatorService.backSpace();
+        break;
+      default:
+        this.calculatorService.addToExpression(clickValue.innerText);
     }
   }
 

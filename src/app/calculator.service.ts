@@ -1,3 +1,4 @@
+import { HistoryService } from './history.service';
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 @Injectable()
@@ -27,11 +28,20 @@ export class CalculatorService {
     unrestrictedType = ['integer', 'decimal'];
     private _evaluatedAction$ = new Subject<string[]>();
 
-    constructor() {
-    }
+    constructor(private historyService: HistoryService) {}
 
     get evaluatedAction$(): Observable<string[]> {
         return this._evaluatedAction$.asObservable();
+    }
+
+    backSpace(): void {
+        const lastValue = this.expression[this.expression.length - 1];
+        if (lastValue.length === 1) {
+            this.expression = this.expression.slice(0, this.expression.length - 1);
+        } else {
+            this.expression[this.expression.length - 1] = lastValue.slice(0, lastValue.length - 1);
+        }
+        this._evaluatedAction$.next(this.expression);
     }
 
     addToExpression(value: string) {
@@ -81,25 +91,23 @@ export class CalculatorService {
         }
 
         this._evaluatedAction$.next(this.expression);
-        console.log(this.expression);
     }
 
     eval() {
         let finalExpression = this.expression.slice();
-        console.log(this.expression);
+        this.historyService.addExpressionToLogs(finalExpression.slice());
         if (finalExpression.length > 1) {
             finalExpression = this.evalFirstOrder(finalExpression);
             finalExpression = this.evalSecondOrder(finalExpression);
         }
 
-        if(finalExpression.length === 1) {
+        if (finalExpression.length === 1) {
             this.expression = finalExpression;
         } else {
             this.expression = ['N/A'];
         }
         this._evaluatedAction$.next(this.expression);
         this.resetExpression();
-        console.log(this.expression);
     }
 
     resetExpression() {
